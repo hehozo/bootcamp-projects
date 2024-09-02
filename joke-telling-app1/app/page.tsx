@@ -13,7 +13,7 @@ export default function TellJoke() {
   const types = [
     { emoji: "🔤", value: "Pun" },
     { emoji: "🇮🇪", value: "Limerick" },
-    { emoji: "🎙️", value: "Standup" },
+    { emoji: "🎙️", value: "Standup Comedian" },
   ];
   const [state, setState] = useState({
     theme: "",
@@ -98,7 +98,7 @@ export default function TellJoke() {
           onClick={() =>
             append({
               role: "user",
-              content: `Generate a joke about ${state.theme} in a ${state.type} structure`,
+              content: `Generate a joke about ${state.theme} in the structure of a ${state.type}`,
             })
           }
         >
