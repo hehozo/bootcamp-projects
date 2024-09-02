@@ -2,23 +2,22 @@
 import { useState } from "react";
 import { useChat } from "ai/react";
 
-export default function Chat() {
+export default function TellJoke() {
   const { messages, append, isLoading } = useChat();
-  const genres = [
-    { emoji: "🧙", value: "Fantasy" },
-    { emoji: "🕵️", value: "Mystery" },
-    { emoji: "💑", value: "Romance" },
-    { emoji: "🚀", value: "Sci-Fi" },
+  const themes = [
+    { emoji: "🏛️", value: "History" },
+    { emoji: "🤓", value: "Nerdy" },
+    { emoji: "💑", value: "Relationships" },
+    { emoji: "🐶", value: "Animals" },
   ];
-  const tones = [
-    { emoji: "😊", value: "Happy" },
-    { emoji: "😢", value: "Sad" },
-    { emoji: "😏", value: "Sarcastic" },
-    { emoji: "😂", value: "Funny" },
+  const types = [
+    { emoji: "🔤", value: "Pun" },
+    { emoji: "🇮🇪", value: "Limerick" },
+    { emoji: "🎙️", value: "Standup" },
   ];
   const [state, setState] = useState({
-    genre: "",
-    tone: "",
+    theme: "",
+    type: "",
   });
   
   const handleChange = ({
@@ -33,18 +32,21 @@ export default function Chat() {
     <main className="mx-auto w-full p-24 flex flex-col">
       <div className="p4 m-4">
         <div className="flex flex-col items-center justify-center space-y-8 text-white">
+          
+          {/* Header section */}
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold">Story Telling App</h2>
+            <h2 className="text-3xl font-bold">Joke-a-tron V1</h2>
             <p className="text-zinc-500 dark:text-zinc-400">
-              Customize the story by selecting the genre and tone.
+              Create a joke by selecting a topic and structure.
             </p>
           </div>
 
+          {/* Selections for joke inputs */}
           <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Genre</h3>
+            <h3 className="text-xl font-semibold">Theme</h3>
 
             <div className="flex flex-wrap justify-center">
-              {genres.map(({ value, emoji }) => (
+              {themes.map(({ value, emoji }) => (
                 <div
                   key={value}
                   className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg"
@@ -53,7 +55,7 @@ export default function Chat() {
                     id={value}
                     type="radio"
                     value={value}
-                    name="genre"
+                    name="theme"
                     onChange={handleChange}
                   />
                   <label className="ml-2" htmlFor={value}>
@@ -65,10 +67,10 @@ export default function Chat() {
           </div>
 
           <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
-            <h3 className="text-xl font-semibold">Tones</h3>
+            <h3 className="text-xl font-semibold">Type</h3>
 
             <div className="flex flex-wrap justify-center">
-              {tones.map(({ value, emoji }) => (
+              {types.map(({ value, emoji }) => (
                 <div
                   key={value}
                   className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg"
@@ -76,7 +78,7 @@ export default function Chat() {
                   <input
                     id={value}
                     type="radio"
-                    name="tone"
+                    name="type"
                     value={value}
                     onChange={handleChange}
                   />
@@ -89,29 +91,27 @@ export default function Chat() {
           </div>
         </div>
 
+        {/* Generate joke button */}
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-          disabled={isLoading || !state.genre || !state.tone}
+          disabled={isLoading || !state.theme || !state.type}
           onClick={() =>
             append({
               role: "user",
-              content: `Generate a ${state.genre} story in a ${state.tone} tone`,
+              content: `Generate a joke about ${state.theme} in a ${state.type} structure`,
             })
           }
         >
-          Generate Story
+          {isLoading ? "Generating..." : "Generate Joke"}
         </button>
 
-        <div
-          hidden={
-            messages.length === 0 ||
-            messages[messages.length - 1]?.content.startsWith("Generate")
-          }
-          className="bg-opacity-25 bg-gray-700 rounded-lg p-4"
-        >
-          {messages[messages.length - 1]?.content}
+        {messages.length > 0 && !messages[messages.length - 1]?.content.startsWith("Generate") && (
+            <div className="w-full mt-8 p-6 bg-white bg-opacity-30 rounded-lg shadow-inner text-white">
+              {/* Display the latest joke */}
+              <p className="text-xl font-medium mb-4">{messages[messages.length - 1]?.content}</p>
+            </div>
+        )}
         </div>
-      </div>
     </main>
   );
 }
